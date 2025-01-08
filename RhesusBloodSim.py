@@ -148,8 +148,8 @@ def conception(averagefamilysize,child,father,mother,generationtime,obituaries,g
 		else:
 			child.allele2 = mother.allele2
 		child.phenotype = (child.allele1, child.allele2) 
-		#looks like I fixed issue with sensitisation in previous code. Now each rh- mother is sensitised in a way that correctly models the real world
-		#if the child and mother are incompatible, the child is added to the obituaries list, if not, the child is added to the next generation list.
+		#Each rh- mother is sensitised in a way that correctly models the real world
+		#If the child and mother are incompatible, the child is added to the obituaries list, if not, the child is added to the next generation list.
 		if mother.phenotype == (0,0) and child.phenotype !=(0,0)  and mothersensitised == 1: #mother.sensitised >0: 
 			obituaries.append(1)
 			#print(len(obituaries), "this is an obituary")
@@ -176,7 +176,7 @@ def generations(generationtime,thisgenalleles,nextgenalleles,father,mother,avera
 		generationgraph.append(x)
 		generationalobituary = len(obituaries)
 		obituarycounter.append(generationalobituary)
-		#print(obituarycounter)
+		#print(obituarycounter) if you wish to debug
 		obituaries.clear()
 		generationalobituary = 0
 		hozp =nextgenalleles.count((1, 1))
@@ -233,11 +233,6 @@ def generations(generationtime,thisgenalleles,nextgenalleles,father,mother,avera
 #this can also be used to present in numerical terms the various statistics, as it does not iterate, and will only print once.
 def endresults(generationgraph,totalpos,totalpos2,frequencylistP,frequencylistN,obituarycounter,generationtime,nextgenalleles,obituaries):
 	generationgraph.append(generationgraph[-1]+1)
-	#hozp =nextgenalleles.count((1, 1))
-	#hetz1 = nextgenalleles.count((1, 0))
-	#hetz2 = nextgenalleles.count((0, 1))
-	#hozn =nextgenalleles.count((0, 0))
-	#totalpos = ((hozp+0.5*hetz1+ 0.5*hetz2)/len(nextgenalleles))
 	if len(nextgenalleles) > len(thisgenalleles):
 		generationpopulationcount.append(len(nextgenalleles))
 	elif len(nextgenalleles) <= len(thisgenalleles):
@@ -262,19 +257,13 @@ def endresults(generationgraph,totalpos,totalpos2,frequencylistP,frequencylistN,
 	ax1.plot(generationgraph, frequencylistP, color='red', linestyle = 'None',  marker='D', label ='Rh+')
 	ax1.plot(generationgraph, frequencylistN, color='black', linestyle = 'None', marker='o', label ='Rh-') 
 	ax1.set_xlim(auto=True)
-	#manually setting axis scale - delete later if auto works fine
-	"""if len(generationgraph) > 200:
-		ax1.set_xlim((min(generationgraph), max(generationgraph)+5, 5))
-	elif len(generationgraph) > 150:
-		ax1.set_xlim((min(generationgraph), max(generationgraph)+3, 3))
-	elif len(generationgraph) > 100:
-		ax1.set_xlim((min(generationgraph), max(generationgraph)+2, 2))
-	else:	
-		ax1.set_xlim((min(generationgraph), max(generationgraph)+1, 1))"""
+	
 	#setting details for allele frequency part
 	ax1.set_xlabel('Generation number')
 	ax1.set_ylabel('Allele frequency')
-	ax1.set_ylim(0.0, 1.1, 0.1)
+	ax1.set_ylim(0.0, 1.1,)
+	ax1.set_yticks(np.arange(0.0, 1.1, 0.1))  # Assuming you have 'import numpy as np'
+
 	ax1.grid(True)
 	plt.legend(loc='upper left')
 	#converting list to array - Replacing all lists with arrays from the start is on todo list
@@ -290,26 +279,6 @@ def endresults(generationgraph,totalpos,totalpos2,frequencylistP,frequencylistN,
 	ax2.set_ylim(0,100)
 	plt.legend(loc='upper right')
 	plt.show()
-
-	#original single plot code, remove if no longer needed for reference
-	"""plt.plot(generationgraph,frequencylistP, color='red', marker='o', label ='Rh+')
-	plt.plot(generationgraph,frequencylistN, color='black', marker='D', label ='Rh-')
-	plt.bar(generationgraph, obituarycounter, color = 'yellow', label ='total deaths')
-	plt.title('Relative frequencies of Rh negative and positive alleles')
-	plt.xlabel('No. of Generations')
-	plt.ylabel('Allele Frequency')
-	leg = plt.legend(loc='upper center')
-	if len(generationgraph) > 200:
-		plt.xticks(np.arange(min(generationgraph), max(generationgraph)+5, 5))
-	elif len(generationgraph) > 150:
-		plt.xticks(np.arange(min(generationgraph), max(generationgraph)+3, 3))
-	elif len(generationgraph) > 100:
-		plt.xticks(np.arange(min(generationgraph), max(generationgraph)+2, 2))
-	else:	
-		plt.xticks(np.arange(min(generationgraph), max(generationgraph)+1, 1))
-	plt.yticks(np.arange(0.0,1.1,0.1))
-	plt.grid(True)
-	plt.show()"""
 	
 	exit()
 	
